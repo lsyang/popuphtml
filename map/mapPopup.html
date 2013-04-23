@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Quick Start Guide Example</title>
+	<meta charset="utf-8" />
+	<script type="text/javascript" src="../external_js/jquery-1.9.0.min.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="../dist/leaflet.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="../dist/leaflet.ie.css" /><![endif]-->
+</head>
+<body>
+
+	<!-- <div id="map" style="width: 600px; height: 400px"></div> -->
+	<div id="map" style="width: 1500px; height: 900px"></div>
+
+	<script src="../dist/leaflet.js"></script>
+	<script>
+
+		var map = L.map('map').setView([42.37, -71.03], 12);
+
+		L.tileLayer('http://{s}.tile.cloudmade.com/1dfc20ee65ee40638ed29eb7b9975515/997/256/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+		}).addTo(map);
+
+
+
+// var geojsonFeature = {
+//     "type": "Feature",
+//     "properties": {
+//         "name": "Coors Field",
+//         "amenity": "Baseball Stadium",
+//         "popupContent": "This is where the Rockies play!"
+//     },
+//     "geometry": {
+//         "type": "Point",
+//         "coordinates": [-71.06231689453125, 42.376300125104024]
+//     }
+// };
+// L.geoJson(geojsonFeature).addTo(map);
+
+
+
+
+
+// function onEachFeature(feature, latlng) {
+//     // does this feature have a property named popupContent?
+//     // if (feature.properties && feature.properties.popupContent) {
+//     //     layer.bindPopup(feature.properties.popupContent);
+//     // }
+//     L.Marker(latlng);
+// }
+
+// var geojsonFeature = [{
+//     "type": "Feature",
+    
+//     "geometry": {
+//         "type": "Point",
+//         "coordinates": [-71.06231689453125, 42.376300125104024]
+//     }},{
+//     "type": "Feature",
+    
+//     "geometry": {
+//         "type": "Point",
+//         "coordinates": [-71.0976791381836, 42.41053006572743]
+//     }
+// }];
+// L.geoJson(geojsonFeature, {
+// 	onEachFeature: onEachFeature
+// }).addTo(map);
+
+
+// // L.geoJson(geojsonFeature, {
+// //     onEachFeature: onEachFeature
+// // }).addTo(map);
+	$(document).ready(function() {
+$.getJSON("../dist/test.json", function(data) {
+	console.log("here!");
+	alert("geojson file loaded");
+	
+	//When GeoJSON is loaded
+	var geojsonLayer = new L.GeoJSON(data);		//New GeoJSON layer
+	map.addLayer(geojsonLayer);			//Add layer to map	
+});
+});
+
+
+		var popup = L.popup();
+
+		function onMapClick(e) {
+			var lat=e.latlng.lat.toString();
+			var lng=e.latlng.lng.toString();
+			console.log(lng+', '+lat);
+			var mapop = new L.LatLng(e.latlng.lat, e.latlng.lng),
+			poppy = new L.Marker(mapop);
+			map.addLayer(poppy);
+			poppy.bindPopup("<p contenteditable=\"true\">original</p><button >Done editing</button><br />").openPopup();
+
+			// popup
+			// 	.setLatLng(e.latlng)
+			// 	.setContent("You clicked the map at " + e.latlng.toString())
+			// 	.openOn(map);
+		}
+        
+
+		map.on('click', onMapClick);
+
+
+	</script>
+</body>
+</html>
